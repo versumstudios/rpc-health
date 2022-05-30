@@ -63,6 +63,7 @@ const checkNode = async (current) => {
 }
 
 const check = async () => {
+  console.log("checking nodes")
   const tzkt = await fetchWithTimeout(
     "https://api.mainnet.tzkt.io/v1/head"
   ).then((e) => e.json())
