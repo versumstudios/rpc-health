@@ -43,9 +43,6 @@ const checkNode = async (current) => {
       `https://${current.node}/chains/main/blocks/head/header`
     ).then((e) => e.json())
     level = response.level - tzkt_level
-    if (level === -1) {
-      console.log("LEVEL IS -1", response.level, tzkt_level)
-    }
     // node has an healthy block difference of less than 60seconds
     if (level < 2) {
       failed = false
