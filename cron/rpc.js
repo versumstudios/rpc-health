@@ -1,3 +1,4 @@
+const { AbortController } = require("node-abort-controller")
 const fetch = require("node-fetch")
 
 // checks every 1 minute
@@ -7,71 +8,77 @@ const CHECK_TIMEOUT = 1000 * 60 * 1
 const FETCH_TIMEOUT = 1000 * 10
 
 const ALL_NODES = [
-  { network: "mainnet", node: "mainnet.api.tez.ie" },
-  { network: "mainnet", node: "mainnet.smartpy.io" },
-  { network: "mainnet", node: "rpc.tzbeta.net" },
-  { network: "mainnet", node: "teznode.letzbake.com" },
-  { network: "mainnet", node: "mainnet-tezos.giganode.io" },
-  { network: "mainnet", node: "mainnet.tezos.marigold.dev" },
-  { network: "mainnet", node: "rpc-mainnet.ateza.io" },
-  { network: "mainnet", node: "eu01-node.teztools.net" },
-  { network: "mainnet", node: "rpc.tzkt.io/mainnet" },
+  "mainnet.api.tez.ie",
+  "mainnet.smartpy.io",
+  "rpc.tzbeta.net",
+  "teznode.letzbake.com",
+  "mainnet-tezos.giganode.io",
+  "mainnet.tezos.marigold.dev",
+  "rpc-mainnet.ateza.io",
+  "eu01-node.teztools.net",
+  "rpc.tzkt.io/mainnet",
 ]
 
-let tzkt_level = 0
-let valid = []
-let broken = []
+let tzktLevel = 0
+const nodes = []
+let timestamp = Date.now()
 
-async function fetchWithTimeout(resource, options = {}) {
-  const { timeout = FETCH_TIMEOUT } = options
-
+const fetchWithTimeout = (url, options = {}) => {
   const controller = new AbortController()
-  const id = setTimeout(() => controller.abort(), timeout)
-  const response = await fetch(resource, {
+  const timeout = setTimeout(() => {
+    controller.abort()
+  }, options?.timeout || FETCH_TIMEOUT)
+
+  return fetch(url, {
     ...options,
     signal: controller.signal,
   })
-  clearTimeout(id)
-  return response
+    .then((res) => {
+      clearTimeout(timeout)
+      return res
+    })
+    .catch((e) => {
+      clearTimeout(timeout)
+    })
 }
 
-const checkNode = async (current) => {
-  let failed = true
+const checkNode = async (node) => {
   let level = -1
+
   try {
     const response = await fetchWithTimeout(
-      `https://${current.node}/chains/main/blocks/head/header`
-    ).then((e) => e.json())
-    level = response.level - tzkt_level
-    // node has an healthy block difference of less than 60seconds
-    if (level < 2) {
-      failed = false
+      `https://${node}/chains/main/blocks/head/header`
+    )
+    if (response?.status === 200) {
+      const data = await response.json()
+
+      level = data.level - tzktLevel
     }
-  } catch (error) {
-    // failed to fetch node or fetch timeout
+  } catch (e) {
+    // timeout or error
   }
 
-  // remove from valid or broken if found
-  valid = valid.filter((e) => e.node !== current.node)
-  broken = broken.filter((e) => e.node !== current.node)
-
-  if (!failed) {
-    valid.push({ ...current, level })
+  const found = nodes.find((e) => e.node === node)
+  if (found) {
+    found.level = level
   } else {
-    broken.push(current)
+    nodes.push({ level, node })
   }
 }
 
 const check = async () => {
-  console.log("checking nodes")
-  const tzkt = await fetchWithTimeout(
-    "https://api.mainnet.tzkt.io/v1/head"
-  ).then((e) => e.json())
-  if (tzkt) {
-    tzkt_level = tzkt.level
+  const response = await fetchWithTimeout("https://api.mainnet.tzkt.io/v1/head")
 
-    for (let i = 0; i < ALL_NODES.length; i++) {
-      await checkNode(ALL_NODES[i])
+  if (response?.status === 200) {
+    const data = await response.json()
+
+    if (data.level) {
+      timestamp = Date.now()
+      tzktLevel = data.level
+
+      for (let i = 0; i < ALL_NODES.length; i += 1) {
+        await checkNode(ALL_NODES[i])
+      }
     }
   }
 
@@ -81,8 +88,8 @@ const check = async () => {
 
 check()
 
-const getNodes = () => {
-  return { valid, broken }
+const GetRPC = () => {
+  return { timestamp, nodes }
 }
 
-module.exports = getNodes
+module.exports = GetRPC
