@@ -16,7 +16,12 @@ router.get("/get-rpc-nodes", (req, res) => {
 
 app.use("/api/v1", router)
 
+app.get("/", (req, res) => {
+  res.send("versum")
+})
+
 const server = http.createServer(app)
-server.listen(3000, function () {
-  console.log("server started at 3000")
+const PORT = process.env.PORT || 3000
+server.listen(PORT, function () {
+  console.log(`server started at ${PORT}`)
 })
