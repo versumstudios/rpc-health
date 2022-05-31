@@ -34,8 +34,6 @@ const fetchWithTimeout = (url, options = {}) => {
 const checkNode = async (node) => {
   let level = -1
 
-  console.log("node", node)
-
   try {
     const response = await fetchWithTimeout(
       `${node}/chains/main/blocks/head/header`

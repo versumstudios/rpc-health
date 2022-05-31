@@ -23,6 +23,18 @@ router.get("/hangzhounet", (req, res) => {
   res.status(200).send(hangzhounet)
 })
 
+router.get("/test", (req, res) => {
+  const { node } = req.query
+  if (node) {
+    const result = getRPC()
+    const found = result.nodes.find((e) => e.node === node)
+    if (found) {
+      return res.status(200).send(found)
+    }
+  }
+  res.status(200).send({ level: -1 })
+})
+
 app.use("/api/v1", router)
 
 app.get("/", (req, res) => {
