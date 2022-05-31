@@ -2,7 +2,7 @@ const { AbortController } = require("node-abort-controller")
 const fetch = require("node-fetch")
 const { mainnet } = require("@versumstudios/rpc-node")
 
-// checks every 1 minute
+// checks every minute
 const CHECK_TIMEOUT = 1000 * 60 * 1
 
 // fetch time out at 10seconds
@@ -36,7 +36,7 @@ const checkNode = async (node) => {
 
   try {
     const response = await fetchWithTimeout(
-      `${node}/chains/main/blocks/head/header`
+      `http://${node}/chains/main/blocks/head/header`
     )
     if (response?.status === 200) {
       const data = await response.json()
