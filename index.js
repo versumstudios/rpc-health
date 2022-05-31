@@ -1,7 +1,7 @@
 const express = require("express")
 const http = require("http")
 const getRPC = require("./cron/rpc")
-const nodes = require("./constants")
+const { mainnet, hangzhounet } = require("@versumstudios/rpc-node")
 
 const app = express()
 const router = express.Router()
@@ -12,7 +12,7 @@ router.use((req, res, next) => {
 })
 
 router.get("/mainnet", (req, res) => {
-  res.status(200).send(nodes.mainnet)
+  res.status(200).send(mainnet)
 })
 
 router.get("/mainnet/status", (req, res) => {
@@ -20,7 +20,7 @@ router.get("/mainnet/status", (req, res) => {
 })
 
 router.get("/hangzhounet", (req, res) => {
-  res.status(200).send(nodes.hangzhounet)
+  res.status(200).send(hangzhounet)
 })
 
 app.use("/api/v1", router)

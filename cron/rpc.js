@@ -1,6 +1,6 @@
 const { AbortController } = require("node-abort-controller")
 const fetch = require("node-fetch")
-const node = require("../constants")
+const { mainnet } = require("@versumstudios/rpc-node")
 
 // checks every 1 minute
 const CHECK_TIMEOUT = 1000 * 60 * 1
@@ -65,8 +65,8 @@ const check = async () => {
       timestamp = Date.now()
       tzktLevel = data.level
 
-      for (let i = 0; i < node.mainnet.length; i += 1) {
-        await checkNode(node.mainnet[i])
+      for (let i = 0; i < mainnet.length; i += 1) {
+        await checkNode(mainnet[i])
       }
     }
   }
