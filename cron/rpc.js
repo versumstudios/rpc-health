@@ -34,9 +34,11 @@ const fetchWithTimeout = (url, options = {}) => {
 const checkNode = async (node) => {
   let level = -1
 
+  console.log("node", node)
+
   try {
     const response = await fetchWithTimeout(
-      `https://${node}/chains/main/blocks/head/header`
+      `${node}/chains/main/blocks/head/header`
     )
     if (response?.status === 200) {
       const data = await response.json()
