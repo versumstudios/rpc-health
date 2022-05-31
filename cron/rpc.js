@@ -1,23 +1,12 @@
 const { AbortController } = require("node-abort-controller")
 const fetch = require("node-fetch")
+const node = require("../constants")
 
 // checks every 1 minute
 const CHECK_TIMEOUT = 1000 * 60 * 1
 
 // fetch time out at 10seconds
 const FETCH_TIMEOUT = 1000 * 10
-
-const ALL_NODES = [
-  "mainnet.api.tez.ie",
-  "mainnet.smartpy.io",
-  "rpc.tzbeta.net",
-  "teznode.letzbake.com",
-  "mainnet-tezos.giganode.io",
-  "mainnet.tezos.marigold.dev",
-  "rpc-mainnet.ateza.io",
-  "eu01-node.teztools.net",
-  "rpc.tzkt.io/mainnet",
-]
 
 let tzktLevel = 0
 const nodes = []
@@ -76,8 +65,8 @@ const check = async () => {
       timestamp = Date.now()
       tzktLevel = data.level
 
-      for (let i = 0; i < ALL_NODES.length; i += 1) {
-        await checkNode(ALL_NODES[i])
+      for (let i = 0; i < node.mainnet.length; i += 1) {
+        await checkNode(node.mainnet[i])
       }
     }
   }

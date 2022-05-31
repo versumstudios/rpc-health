@@ -1,6 +1,7 @@
 const express = require("express")
 const http = require("http")
 const getRPC = require("./cron/rpc")
+const nodes = require("./constants")
 
 const app = express()
 const router = express.Router()
@@ -10,8 +11,16 @@ router.use((req, res, next) => {
   next()
 })
 
-router.get("/get-rpc-nodes", (req, res) => {
+router.get("/mainnet", (req, res) => {
+  res.status(200).send(nodes.mainnet)
+})
+
+router.get("/mainnet/status", (req, res) => {
   res.status(200).send(getRPC())
+})
+
+router.get("/hangzhounet", (req, res) => {
+  res.status(200).send(nodes.hangzhounet)
 })
 
 app.use("/api/v1", router)
