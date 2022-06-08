@@ -33,7 +33,9 @@ const fetchWithTimeout = (url, options = {}) => {
 
 const checkNode = async (node) => {
   let level = -1
+  let time = 0
 
+  const before = Date.now()
   try {
     const response = await fetchWithTimeout(
       `http://${node}/chains/main/blocks/head/header`
@@ -42,22 +44,25 @@ const checkNode = async (node) => {
       const data = await response.json()
 
       level = Math.abs(tzktLevel - data.level) // regardless of who's ahead, we only count the block diff
-      console.log(node, level)
     }
   } catch (e) {
     // timeout or error
   }
 
+  time = Date.now() - before
+  console.log(node, time, level)
+
   const found = nodes.find((e) => e.node === node)
   if (found) {
     found.level = level
+    found.time = time
   } else {
-    nodes.push({ level, node })
+    nodes.push({ level, time, node })
   }
 }
 
 const check = async () => {
-  console.log("new cycle")
+  console.log("----------\nnew cycle\n----------")
   const response = await fetchWithTimeout("https://api.mainnet.tzkt.io/v1/head")
 
   if (response?.status === 200) {
