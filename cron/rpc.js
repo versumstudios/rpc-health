@@ -41,8 +41,8 @@ const checkNode = async (node) => {
     if (response?.status === 200) {
       const data = await response.json()
 
-      level = tzktLevel - data.level
-      console.log(`check ${node}`, level, tzktLevel, data.level)
+      level = Math.abs(tzktLevel - data.level) // regardless of who's ahead, we only count the block diff
+      console.log(node, level)
     }
   } catch (e) {
     // timeout or error
@@ -57,6 +57,7 @@ const checkNode = async (node) => {
 }
 
 const check = async () => {
+  console.log("new cycle")
   const response = await fetchWithTimeout("https://api.mainnet.tzkt.io/v1/head")
 
   if (response?.status === 200) {
