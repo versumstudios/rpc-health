@@ -38,7 +38,7 @@ const checkNode = async (node) => {
   const before = Date.now()
   try {
     const response = await fetchWithTimeout(
-      `http://${node}/chains/main/blocks/head/header`
+      `https://${node}/chains/main/blocks/head/header`
     )
     if (response?.status === 200) {
       const data = await response.json()
