@@ -41,7 +41,7 @@ const checkNode = async (node) => {
     if (response?.status === 200) {
       const data = await response.json()
 
-      level = data.level - tzktLevel
+      level = tzktLevel - data.level
     }
   } catch (e) {
     // timeout or error
