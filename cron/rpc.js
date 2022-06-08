@@ -42,6 +42,7 @@ const checkNode = async (node) => {
       const data = await response.json()
 
       level = tzktLevel - data.level
+      console.log(`check ${node}`, level, tzktLevel, data.level)
     }
   } catch (e) {
     // timeout or error
