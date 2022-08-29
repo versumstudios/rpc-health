@@ -1,6 +1,6 @@
 {
   "name": "rpc-health",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "engines": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/versumstudios/rpc-health#readme",
   "dependencies": {
-    "@versumstudios/rpc-node": "^1.0.3",
+    "@versumstudios/rpc-node": "^1.0.4",
     "express": "^4.18.1",
     "http": "^0.0.1-security",
     "node-abort-controller": "^3.0.1",
