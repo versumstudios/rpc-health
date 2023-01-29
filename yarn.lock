@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@versumstudios/rpc-node@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@versumstudios/rpc-node/-/rpc-node-1.0.5.tgz#38a88ee65d1a5c49a908c4c50aeeced549221d05"
-  integrity sha512-ikLDk4hce8krZ32sARBML12Ln8X3pKSDP+Blcj6ZO+2X2OrwmGzkxKI533He9+kGEWqjsoHbo9WsP5BnApNQ+w==
+"@versumstudios/rpc-node@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@versumstudios/rpc-node/-/rpc-node-1.0.6.tgz#623e2f6a1d10d2244a43ccdd201c0bcaf4ae0ab5"
+  integrity sha512-X2jiVsJ1Ei4ZZw0c4NAVH1j6zcMN78/1cF6X018QIhvAsPuDefRYIhvj7beavhQOhtEVhOvlILVbdhqZgmXV0g==
 
 accepts@~1.3.8:
   version "1.3.8"
